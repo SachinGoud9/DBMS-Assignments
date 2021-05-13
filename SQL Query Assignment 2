@@ -1,0 +1,80 @@
+1. Find out the number of documentaries with deleted scenes.
+
+Query:
+select count(*) from ((film inner join film_category on film.film_id=film_category.film_id)inner join category on film_category.category_id=category.category_id)where category.name="Documentary" and INSTR(film.special_features,"Deleted Scenes")!=0 group by category.category_id;
+
+
+Ouput:
+
++----------+
+| count(*) |
++----------+
+|       34 |
++----------+
+1 row in set (0.01 sec)
+
+2. Find out the number of sci-fi movies rented by the store managed by Jon Stephens.
+
+
+Query:
+
+select count(distinct film.film_id) from (((((film inner join film_category on film.film_id=film_category.film_id) inner join category on film_category.category_id=category.category_id) inner join inventory on film.film_id=inventory.film_id)inner join rental on inventory.inventory_id=rental.inventory_id)inner join staff on rental.staff_id=staff.staff_id)where staff.first_name="JON" and staff.last_name="STEPHENS" group by category.name having category.name="sci-fi";
+
+Output:
+
++------------------------------+
+| count(distinct film.film_id) |
++------------------------------+
+|                           59 |
++------------------------------+
+1 row in set (0.05 sec)
+
+3. Find out the total sales from Animation movies.
+
+Query:
+
+select total_sales from sales_by_film_category where category="Animation";
+
+Output:
+
++-------------+
+| total_sales |
++-------------+
+|     4656.30 |
++-------------+
+1 row in set (0.01 sec)
+
+4. Find out the top 3 rented category of movies by “PATRICIA JOHNSON”.
+
+Query:
+
+select film_list.category,count(film_list.category) from (((film_list inner join inventory on film_list.fid=inventory.film_id) inner join rental on inventory.inventory_id=rental.inventory_id)inner join customer on rental.customer_id=customer.customer_id)where customer.first_name="PATRICIA" and customer.last_name="JOHNSON" group by film_list.category order by count(film_list.category) desc limit 3;
+
+Output:
+
++-----------+---------------------------+
+| category  | count(film_list.category) |
++-----------+---------------------------+
+| Sports    |                         5 |
+| Classics  |                         4 |
+| Animation |                         3 |
++-----------+---------------------------+
+3 rows in set (0.03 sec)
+
+
+5. Find out the number of R rated movies rented by “SUSAN WILSON”.
+
+Query:
+
+select film_list.rating, count(film_list.rating) from (((film_list inner
+join inventory on film_list.fid=inventory.film_id)inner join rental on inventory.inventory_id=rental.inventory_id) inner join customer on rental.customer_id=customer.customer_id) where customer.first_name="SUSAN" and customer.last_name="WILSON" group by film_list.rating having rating="R";
+
+Output:
+
++--------+-------------------------+
+| rating | count(film_list.rating) |
++--------+-------------------------+
+| R      |                       3 |
++--------+-------------------------+
+1 row in set (0.04 sec)
+

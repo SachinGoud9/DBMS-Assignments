@@ -1,0 +1,143 @@
+1. Find out the PG-13 rated comedy movies. DO NOT use the film_list table.
+
+Query:
+select title from film inner join (select film_id,category.name from category inner join film_category on category.category_id=film_category.category_id) categorized on film.film_id=categorized.film_id where film.rating='PG-13' and categorized.name='Comedy';
+
+Output:
++-------------------------+
+| title                   |
++-------------------------+
+| AIRPLANE SIERRA         |
+| ANTHEM LUKE             |
+| FLINTSTONES HAPPINESS   |
+| FREEDOM CLEOPATRA       |
+| GROUNDHOG UNCUT         |
+| KNOCK WARLOCK           |
+| PARADISE SABRINA        |
+| PERFECT GROOVE          |
+| RUSHMORE MERMAID        |
+| SADDLE ANTITRUST        |
+| STRICTLY SCARFACE       |
+| TRAINSPOTTING STRANGERS |
++-------------------------+
+12 rows in set (0.00 sec)
+
+
+2. Find out the top 3 rented horror movies.
+
+Query:
+select distinct title from (film inner join(select film_id as "idfilm",category.name as "cat" from category inner join film_category on category.category_id=film_category.category_id) categorized on film.film_id=categorized.idfilm) inner join (select inventory.inventory_id as "invenid",film_id as "filmid" from inventory inner join rental on inventory.inventory_id=rental.inventory_id) rent on rent.filmid=idfilm where cat="Horror" limit 3;
+
+
+Output:
+
+
++------------------+
+| title            |
++------------------+
+| ACE GOLDFINGER   |
+| AFFAIR PREJUDICE |
+| AIRPORT POLLOCK  |
++------------------+
+3 rows in set (0.00 sec)
+
+
+3. Find out the list of customers from India who have rented sports movies.
+
+Query:
+select distinct customer_list.name from (((((film inner join film_category on film.film_id=film_category.film_id)inner join category on film_category.category_id=category.category_id) inner join inventory on film.film_id=inventory.film_id)inner join rental on inventory.inventory_id=rental.inventory_id) inner join customer_list on rental.customer_id=customer_list.id) where customer_list.country="India" and category.name="Sports" order by customer_list.name;
+
+
+Output:
+
++-------------------+
+| name              |
++-------------------+
+| ADAM GOOCH        |
+| ALLEN BUTTERFIELD |
+| AMY LOPEZ         |
+| ANITA MORALES     |
+| ANNETTE OLSON     |
+| ARLENE HARVEY     |
+| BEATRICE ARNOLD   |
+| BERNARD COLBY     |
+| BRADLEY MOTLEY    |
+| BRETT CORNWELL    |
+| CARLOS COUGHLIN   |
+| CHAD CARBONE      |
+| CHERYL MURPHY     |
+| CHRISTIAN JUNG    |
+| CYNTHIA YOUNG     |
+| DWAYNE OLVERA     |
+| EDITH MCDONALD    |
+| GEORGIA JACOBS    |
+| GERALD FULTZ      |
+| HELEN HARRIS      |
+| HOLLY FOX         |
+| JOHN FARNSWORTH   |
+| JOSEPHINE GOMEZ   |
+| JOSHUA MARK       |
+| JUANITA MASON     |
+| LAURIE LAWRENCE   |
+| LEE HAWKS         |
+| LENA JENSEN       |
+| LORI WOOD         |
+| LUCY WHEELER      |
+| MIKE WAY          |
+| MILDRED BAILEY    |
+| MILTON HOWLAND    |
+| NANCY THOMAS      |
+| NAOMI JENNINGS    |
+| NICOLE PETERSON   |
+| NINA SOTO         |
+| PAULA BRYANT      |
+| PEARL GARZA       |
+| PENNY NEAL        |
+| RAMONA HALE       |
+| SALLY PIERCE      |
+| SAMUEL MARLOW     |
+| SHANNON FREEMAN   |
+| SHERRI RHODES     |
+| STEVEN CURLEY     |
+| THEODORE CULP     |
+| TIM CARY          |
+| TONYA CHAPMAN     |
+| WAYNE TRUONG      |
++-------------------+
+50 rows in set (0.02 sec)
+
+
+4. Find out the list of customers from Canada who have rented “NICK WAHLBERG” movies.
+
+
+Query:
+
+select distinct customer_list.name from (((((((actor inner join film_actor on actor.actor_id=film_actor.actor_id)inner join film on film_actor.film_id=film.film_id)inner join film_category on film.film_id=film_category.film_id)inner join category on film_category.category_id=category.category_id)inner join inventory on film.film_id=inventory.film_id)inner join rental on inventory.inventory_id=rental.inventory_id)inner join customer_list on rental.customer_id=customer_list.id)where customer_list.country="Canada" and actor.first_name="NICK" and last_name="WAHLBERG" order by customer_list.name;
+
+Output:
+
+
++-------------------+
+| name              |
++-------------------+
+| DARRELL POWER     |
+| LORETTA CARPENTER |
++-------------------+
+2 rows in set (0.00 sec)
+
+
+5. Find out the number of movies in which “SEAN WILLIAMS” acted.
+
+Query:
+
+select concat(actor.first_name,concat(" ",actor.last_name)) as "actor_name" ,count(*) from actor inner join film_actor on actor.actor_id=film_actor.actor_id group by actor_name having actor_name="SEAN WILLIAMS";
+
+Output:
+
++---------------+----------+
+| actor_name    | count(*) |
++---------------+----------+
+| SEAN WILLIAMS |       26 |
++---------------+----------+
+1 row in set (0.01 sec)
+
